@@ -25,6 +25,8 @@
 #include "openssl/sha.h"
 #include "src/constants.h"
 
+#include <iostream>
+
 namespace fido2_tests {
 namespace crypto_utility {
 
@@ -68,6 +70,13 @@ void WritePublicKeyToCoseMap(const EC_GROUP* ec_group,
       ec_group, ec_public_key, &platform_public_key_x_bignum,
       &platform_public_key_y_bignum, nullptr))
       << "unable to get public key coordinates - TEST SUITE BUG";
+  std::cout << "host public key (x): ";
+  std::cout << BN_bn2hex(&platform_public_key_x_bignum);
+  std::cout << std::endl;
+  std::cout << "host public key (y): ";
+  std::cout << BN_bn2hex(&platform_public_key_y_bignum);
+  std::cout << std::endl;
+  
   int platform_public_key_x_len = BN_num_bytes(&platform_public_key_x_bignum);
   std::vector<uint8_t> platform_public_key_x(kCoordinateEncodingSize, 0);
   CHECK_GE(kCoordinateEncodingSize, platform_public_key_x_len)
@@ -186,12 +195,27 @@ std::vector<uint8_t> CompleteEcdhHandshake(
 
   bssl::UniquePtr<EC_GROUP> group(EC_GROUP_new_by_curve_name(kCurveName));
   CHECK(group != nullptr) << "unable to create EC group - TEST SUITE BUG";
+  std::cout << "device pub key x: [";
+  for (uint8_t i: public_key_in_x)
+    std::cout << int(i) << ", ";
+  std::cout << " ]";
+  std::cout << std::endl;
+
+  std::cout << "device pub key y: [";
+  for (uint8_t i: public_key_in_y)
+    std::cout << int(i) << ", ";
+  std::cout << " ]";
+  std::cout << std::endl;
+
   bssl::UniquePtr<EC_POINT> received_point(EcPointFromPublicCoordinates(
       group.get(), public_key_in_x, public_key_in_y));
 
   bssl::UniquePtr<EC_KEY> generated_key(EC_KEY_new_by_curve_name(kCurveName));
   CHECK(EC_KEY_generate_key(generated_key.get()))
       << "could not generate platform key - TEST SUITE BUG";
+  std::cout << "EC private key (host_bytes): ";
+  std::cout << BN_bn2hex(EC_KEY_get0_private_key(generated_key.get()));
+  std::cout << std::endl;
   WritePublicKeyToCoseMap(group.get(),
                           EC_KEY_get0_public_key(generated_key.get()),
                           cose_public_key_out);
@@ -221,8 +245,28 @@ std::vector<uint8_t> LeftHmacSha256(const std::vector<uint8_t>& secret,
                                     const std::vector<uint8_t>& message) {
   uint8_t hmac_result[SHA256_DIGEST_LENGTH];
   unsigned result_len;
+  std::cout << "lefthmacsha256" << std::endl;
+  std::cout << "host_ss: [";
+  for (uint8_t i: secret)
+    std::cout << int(i) << ", ";
+  std::cout << " ]";
+  std::cout << std::endl;
+  std::cout << "contents: [";
+  for (uint8_t i: message)
+    std::cout << int(i) << ", ";
+  std::cout << " ]";
+  std::cout << std::endl;
+
+
   HMAC(EVP_sha256(), secret.data(), secret.size(), message.data(),
        message.size(), hmac_result, &result_len);
+
+  std::cout << "hmac result: [";
+  for (uint8_t i: hmac_result)
+    std::cout << int(i) << ", ";
+  std::cout << " ]";
+  std::cout << std::endl;
+
   CHECK_EQ((int)result_len, SHA256_DIGEST_LENGTH)
       << "unexpected output length of HMAC - TEST SUITE BUG";
   return std::vector<uint8_t>(hmac_result, hmac_result + kAuthTokenSize);

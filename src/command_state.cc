@@ -24,6 +24,13 @@
 #include "src/crypto_utility.h"
 #include "src/fido2_commands.h"
 
+#include <string>
+#include <arpa/inet.h> // htons, inet_addr
+#include <netinet/in.h> // sockaddr_in
+#include <sys/types.h> // uint16_t
+#include <sys/socket.h> // socket, sendto
+#include <unistd.h> // close
+
 namespace fido2_tests {
 namespace {
 constexpr size_t kPinByteLength = 64;
@@ -60,7 +67,20 @@ CommandState::CommandState(DeviceInterface* device,
 
 void CommandState::PromptReplugAndInit() {
   std::cout << "Please replug the device, then hit enter." << std::endl;
+  // std::cin.ignore();
+
+  CHECK(fido2_tests::Status::kErrNone == device_->Init())
+      << "CTAPHID initialization failed";
+
+  platform_cose_key_ = cbor::Value::MapValue();
+  shared_secret_ = cbor::Value::BinaryValue();
+  auth_token_ = cbor::Value::BinaryValue();
+}
+
+  void CommandState::PromptReplugAndInitFullStop() {
+  std::cout << "Manual replug of the device, then hit enter." << std::endl;
   std::cin.ignore();
+
   CHECK(fido2_tests::Status::kErrNone == device_->Init())
       << "CTAPHID initialization failed";
 
@@ -72,12 +92,29 @@ void CommandState::PromptReplugAndInit() {
 void CommandState::Reset() {
   std::cout << "You have 10 seconds for the next touch after pressing enter.\n";
   PromptReplugAndInit();
+
   absl::variant<cbor::Value, Status> response;
   for (int i = 0; i < kResetRetries; ++i) {
     // Linear increase of waiting time by using the iteration index as a
     // multiplier. This has the nice advantage of not waiting on the first
     // iteration.
     absl::SleepFor(absl::Milliseconds(100) * i);
+  sleep(2);
+  std::string hostname{"10.0.245.135"};
+  uint16_t port = 6502;
+  int sock = ::socket(AF_INET, SOCK_DGRAM, 0);
+
+  sockaddr_in destination;
+  destination.sin_family = AF_INET;
+  destination.sin_port = htons(port);
+  destination.sin_addr.s_addr = inet_addr(hostname.c_str());
+
+  std::string msg = "y";
+  int n_bytes = ::sendto(sock, msg.c_str(), msg.length(), 0, reinterpret_cast<sockaddr*>(&destination), sizeof(destination));
+  std::cout << n_bytes << " bytes sent" << std::endl;
+  ::close(sock);
+  sleep(1);
+    
     response = fido2_commands::ResetPositiveTest(device_);
     if (device_tracker_->CheckStatus(response)) {
       break;

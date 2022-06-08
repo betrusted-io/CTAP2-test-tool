@@ -36,6 +36,8 @@ class CommandState {
   // that need a power cycle (i.e. resetting). The Init will then handle device
   // initilalization, regardless of the current state of the device.
   void PromptReplugAndInit();
+  // Added as a "true stop" because a stack reset is required to pass the test
+  void PromptReplugAndInitFullStop();
   // Calls the Reset command to reset the state of the device.
   void Reset();
   // Takes actions until the state is neutral. Call this function before

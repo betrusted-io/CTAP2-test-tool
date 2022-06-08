@@ -148,7 +148,7 @@ std::optional<std::string> RegeneratesPinAuthTest::Execute(
   cbor::Value::BinaryValue old_auth_token =
       command_state->GetCurrentAuthToken();
 
-  command_state->PromptReplugAndInit();
+  command_state->PromptReplugAndInitFullStop();
 
   if (!device_tracker->CheckStatus(command_state->GetAuthToken())) {
     return "Getting the auth token failed unexpectedly.";
