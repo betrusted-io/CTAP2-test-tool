@@ -67,7 +67,7 @@ CommandState::CommandState(DeviceInterface* device,
 
 void CommandState::PromptReplugAndInit() {
   std::cout << "Please replug the device, then hit enter." << std::endl;
-  // std::cin.ignore();
+  std::cin.ignore(); // this was commented out for "full auto" mode
 
   CHECK(fido2_tests::Status::kErrNone == device_->Init())
       << "CTAPHID initialization failed";
@@ -99,6 +99,8 @@ void CommandState::Reset() {
     // multiplier. This has the nice advantage of not waiting on the first
     // iteration.
     absl::SleepFor(absl::Milliseconds(100) * i);
+
+    /*
   sleep(2);
   std::string hostname{"10.0.245.135"};
   uint16_t port = 6502;
@@ -114,6 +116,7 @@ void CommandState::Reset() {
   std::cout << n_bytes << " bytes sent" << std::endl;
   ::close(sock);
   sleep(1);
+    */
     
     response = fido2_commands::ResetPositiveTest(device_);
     if (device_tracker_->CheckStatus(response)) {

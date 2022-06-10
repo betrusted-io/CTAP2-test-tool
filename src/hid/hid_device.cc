@@ -68,6 +68,7 @@ constexpr uint8_t kCtapHidKeepalive = Frame::kTypeInitMask | 0x3b;
 
 void PromptUser() {
   std::cout << "Please touch your security key!" << std::endl;
+  /*
   sleep(2);
   std::string hostname{"10.0.245.135"};
   uint16_t port = 6502;
@@ -82,6 +83,7 @@ void PromptUser() {
   int n_bytes = ::sendto(sock, msg.c_str(), msg.length(), 0, reinterpret_cast<sockaddr*>(&destination), sizeof(destination));
   std::cout << n_bytes << " bytes sent" << std::endl;
   ::close(sock);
+  */
 }
 
 // This function outputs the vendor & product ID for a HID device at a given
