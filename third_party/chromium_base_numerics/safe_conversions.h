@@ -12,8 +12,8 @@
 
 #include "third_party/chromium_base_numerics/safe_conversions_impl.h"
 
-#if !defined(__native_client__) && (defined(__ARMEL__) || defined(__arch64__))
-#include "third_party/chromium_base_numerics/safe_conversions_arm_impl.h"
+#if 0 // !defined(__native_client__) && (defined(__ARMEL__) || defined(__arch64__))
+#include "third_party/chromium_base_numerics/safe_math_arm_impl.h"
 #define BASE_HAS_OPTIMIZED_SAFE_CONVERSIONS (1)
 #else
 #define BASE_HAS_OPTIMIZED_SAFE_CONVERSIONS (0)
