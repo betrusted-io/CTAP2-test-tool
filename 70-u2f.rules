@@ -13,6 +13,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+# This gets put in /etc/udev/rules.d. Technically the current change should be
+# committed back to the origin https://github.com/Yubico/libu2f-host/blob/master/70-u2f.rules
+# but we're still using a fake VID/PID so I'm pretty sure they don't want the PR.
+
 # this udev file should be used with udev 188 and newer
 ACTION!="add|change", GOTO="u2f_end"
 
