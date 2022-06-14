@@ -15,13 +15,15 @@
 
 # This gets put in /etc/udev/rules.d. Technically the current change should be
 # committed back to the origin https://github.com/Yubico/libu2f-host/blob/master/70-u2f.rules
-# but we're still using a fake VID/PID so I'm pretty sure they don't want the PR.
+# once we actually have a "release"
 
 # this udev file should be used with udev 188 and newer
 ACTION!="add|change", GOTO="u2f_end"
 
 # Precursor test
 KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="0001", TAG+="uaccess", GROUP="plugdev", MODE="0660"
+# Precursor "production"
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="3613", TAG+="uaccess", GROUP="plugdev", MODE="0660"
 
 # Yubico YubiKey
 KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0113|0114|0115|0116|0120|0121|0200|0402|0403|0406|0407|0410", TAG+="uaccess", GROUP="plugdev", MODE="0660"
