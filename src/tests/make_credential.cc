@@ -682,6 +682,8 @@ std::optional<std::string> MakeCredentialFullStoreTest::Execute(
   }
   if (returned_status != Status::kErrNone) {
     if (returned_status != Status::kErrKeyStoreFull) {
+      std::cout << "status: ";
+      std::cout << StatusToString(returned_status);
       return "Filling the key store failed with an unexpected error.";
     }
   } else {
