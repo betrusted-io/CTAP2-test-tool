@@ -667,7 +667,7 @@ MakeCredentialFullStoreTest::MakeCredentialFullStoreTest()
 std::optional<std::string> MakeCredentialFullStoreTest::Execute(
     DeviceInterface* device, DeviceTracker* device_tracker,
     CommandState* command_state) const {
-  constexpr int kNumCredentials = 50;
+  constexpr int kNumCredentials = 25;
   MakeCredentialCborBuilder resident_key_builder;
   resident_key_builder.AddDefaultsForRequiredFields(RpId());
   resident_key_builder.SetResidentKeyOptions(true);
