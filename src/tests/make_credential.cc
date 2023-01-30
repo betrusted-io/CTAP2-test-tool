@@ -692,6 +692,7 @@ std::optional<std::string> MakeCredentialFullStoreTest::Execute(
         " credentials were successfully created."));
   }
 
+  std::cout << "--> reset due to MakeCredentialFullStoreTest <--" << std::endl;
   command_state->Reset();
   return std::nullopt;
 }

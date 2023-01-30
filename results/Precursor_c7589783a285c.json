@@ -2,28 +2,38 @@
   "capabilities": {
     "cbor": true,
     "extensions": [
+      "largeBlobKey",
+      "credProtect",
+      "credBlob",
+      "minPinLength",
       "hmac-secret"
     ],
     "msg": true,
     "options": [
-      "clientPin",
+      "credMgmt",
+      "setMinPINLength",
+      "authnrCfg",
+      "pinUvAuthToken",
+      "largeBlobs",
       "rk",
+      "makeCredUvNotRqd",
+      "clientPin",
       "up"
     ],
     "signature_counter": "All counters were strictly increasing, but not necessarily incremented by 1.",
     "versions": [
-      "FIDO_2_1_PRE",
       "U2F_V2",
-      "FIDO_2_0"
+      "FIDO_2_0",
+      "FIDO_2_1_PRE"
     ],
     "wink": true
   },
-  "commit": "80d50c54504efb5469f3b05ccdb2da4411fb47e0",
-  "date": "2022-06-11",
+  "commit": "ca68fdee5657c73cf878571629399ee0b8ebde57",
+  "date": "2023-01-30",
   "device_under_test": {
-    "aaguid": "000102030405060708090a0b0c0d0e0f",
+    "aaguid": "48e0371c325257f7d2f0000fbd7a8919",
     "manufacturer": "Kosagi",
-    "product_id": "0x0001",
+    "product_id": "0x3613",
     "product_name": "Precursor",
     "serial_number": "c7589783a285c",
     "url": null,
@@ -210,7 +220,7 @@
       "error_message": null,
       "id": "make_credential_full_store",
       "observations": [
-        "The test for full store errors was aborted after 5 credentials were successfully created."
+        "The test for full store errors was aborted after 25 credentials were successfully created."
       ],
       "result": "pass",
       "tags": []
@@ -219,10 +229,7 @@
       "description": "Tests if user touch is required for MakeCredential.",
       "error_message": null,
       "id": "make_credential_physical_presence",
-      "observations": [
-        "Expected error code `CTAP2_ERR_USER_ACTION_TIMEOUT`, got `CTAP2_ERR_NOT_ALLOWED`.",
-        "A prompt was sent unexpectedly."
-      ],
+      "observations": [],
       "result": "pass",
       "tags": []
     },
@@ -332,9 +339,7 @@
       "description": "Tests if assertions with resident keys work.",
       "error_message": null,
       "id": "get_assertion_resident_key",
-      "observations": [
-        "A prompt was sent unexpectedly."
-      ],
+      "observations": [],
       "result": "pass",
       "tags": []
     },
@@ -342,9 +347,7 @@
       "description": "Tests if assertions with non-resident keys work.",
       "error_message": null,
       "id": "get_assertion_non_resident_key",
-      "observations": [
-        "A prompt was sent unexpectedly."
-      ],
+      "observations": [],
       "result": "pass",
       "tags": []
     },
@@ -412,9 +415,7 @@
       "description": "Tests if user touch is required for GetAssertion.",
       "error_message": null,
       "id": "get_assertion_physical_presence",
-      "observations": [
-        "Expected error code `CTAP2_ERR_USER_ACTION_TIMEOUT`, got `CTAP2_ERR_NOT_ALLOWED`."
-      ],
+      "observations": [],
       "result": "pass",
       "tags": []
     },
@@ -530,10 +531,7 @@
       "description": "Tests if GetPinUvAuthTokenUsingUvWithPermissions works with parameters of the wrong type.",
       "error_message": null,
       "id": "client_pin_get_pin_uv_auth_token_using_uv_with_permissions_bad_parameter_types",
-      "observations": [
-        "Received unknown error code `0x3e`",
-        "Expected error code `CTAP2_ERR_CBOR_UNEXPECTED_TYPE`, got `CTAP1_ERR_OTHER`."
-      ],
+      "observations": [],
       "result": "pass",
       "tags": [
         "Client PIN",
@@ -544,7 +542,10 @@
       "description": "Tests if GetPinUvAuthTokenUsingUvWithPermissions works with missing parameters.",
       "error_message": null,
       "id": "client_pin_get_pin_uv_auth_token_using_uv_with_permissions_missing_parameter",
-      "observations": [],
+      "observations": [
+        "Received unknown error code `0x3e`",
+        "Expected error code `CTAP2_ERR_MISSING_PARAMETER`, got `CTAP1_ERR_OTHER`."
+      ],
       "result": "pass",
       "tags": [
         "Client PIN",
@@ -597,22 +598,26 @@
       "description": "Tests if new PIN requirement are enforced in SetPin.",
       "error_message": null,
       "id": "client_pin_new_requirements_set_pin",
-      "observations": [],
+      "observations": [
+        "Expected error code `CTAP2_ERR_PIN_POLICY_VIOLATION`, got `CTAP1_ERR_INVALID_PARAMETER`."
+      ],
       "result": "pass",
       "tags": [
-        "Client PIN",
-        "FIDO 2.1"
+        "FIDO 2.1",
+        "Client PIN"
       ]
     },
     {
       "description": "Tests if new PIN requirement are enforced in ChangePin.",
       "error_message": null,
       "id": "client_pin_new_requirements_change_pin",
-      "observations": [],
+      "observations": [
+        "Expected error code `CTAP2_ERR_PIN_POLICY_VIOLATION`, got `CTAP1_ERR_INVALID_PARAMETER`."
+      ],
       "result": "pass",
       "tags": [
-        "Client PIN",
-        "FIDO 2.1"
+        "FIDO 2.1",
+        "Client PIN"
       ]
     },
     {
@@ -705,9 +710,7 @@
       "description": "Tests if Reset actually deletes credentials.",
       "error_message": null,
       "id": "delete_credential",
-      "observations": [
-        "A prompt was sent unexpectedly."
-      ],
+      "observations": [],
       "result": "pass",
       "tags": []
     },
@@ -725,10 +728,7 @@
       "description": "Tests if Reset requirements are enforced.",
       "error_message": null,
       "id": "reset_physical_presence",
-      "observations": [
-        "Expected error code `CTAP2_ERR_USER_ACTION_TIMEOUT`, got `CTAP2_ERR_NOT_ALLOWED`.",
-        "A prompt was sent unexpectedly."
-      ],
+      "observations": [],
       "result": "pass",
       "tags": [
         "FIDO 2.1"

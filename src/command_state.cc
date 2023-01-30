@@ -67,7 +67,8 @@ CommandState::CommandState(DeviceInterface* device,
 
 void CommandState::PromptReplugAndInit() {
   std::cout << "Please replug the device, then hit enter." << std::endl;
-  std::cin.ignore(); // this was commented out for "full auto" mode
+  std::cin.ignore();
+  std::cout << "Enter received, proceeding!" << std::endl;
 
   CHECK(fido2_tests::Status::kErrNone == device_->Init())
       << "CTAPHID initialization failed";

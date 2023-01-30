@@ -653,6 +653,7 @@ std::optional<std::string> ClientPinBlockPinRetriesTest::Execute(
     return "The correct PIN is not blocked after using up all retries.";
   }
 
+  std::cout << "--> reset due to ClientBlockPinRetriesTest <--" << std::endl;
   command_state->Reset();
   return std::nullopt;
   // TODO(kaczmarczyck) check optional powerCycleState

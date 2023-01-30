@@ -166,12 +166,15 @@ void RunTests(DeviceInterface* device, DeviceTracker* device_tracker,
       continue;
     }
     test->Setup(command_state);
+    std::cout << "Running test " << test->GetDescription() << std::endl;
     std::optional<std::string> error_message =
         test->Execute(device, device_tracker, command_state);
     // If tests involving the PIN fail, the internal state might not track the
     // actual device state correctly.
     if (error_message.has_value() && test->HasTag(Tag::kClientPin)) {
+      std::cout << "--> reset due to PIN fail <--" << std::endl;
       command_state->Reset();
+      std::cout << "--> reset is complete <--" << std::endl;
     }
     device_tracker->LogTest(test->GetId(), test->GetDescription(),
                             error_message, test->ListTags());

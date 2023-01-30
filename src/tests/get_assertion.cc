@@ -568,7 +568,7 @@ std::optional<std::string> GetAssertionPinAuthMissingParameterTest::Execute(
                                    returned_status)) {
     return "Missing PIN protocol was not rejected when PIN is set.";
   }
-
+  std::cout << "--> reset due to GetAssertionPinAuthMissingParameterTest <--" << std::endl;
   command_state->Reset();
   return std::nullopt;
 }

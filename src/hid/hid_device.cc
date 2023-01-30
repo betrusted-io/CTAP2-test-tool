@@ -68,6 +68,9 @@ constexpr uint8_t kCtapHidKeepalive = Frame::kTypeInitMask | 0x3b;
 
 void PromptUser() {
   std::cout << "Please touch your security key!" << std::endl;
+  absl::SleepFor(absl::Seconds(1));
+  std::cout << "(pause done)" << std::endl;
+  
   /*
   sleep(2);
   std::string hostname{"10.0.245.135"};

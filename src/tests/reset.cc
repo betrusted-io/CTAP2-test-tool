@@ -57,6 +57,7 @@ std::optional<std::string> DeleteCredentialsTest::Execute(
     return "The created credential was already unusable before reset.";
   }
 
+  std::cout << "--> reset due to DeleteCredentialsTest <--" << std::endl;
   command_state->Reset();
 
   // TODO(#16) resolve backwards incompatible user presence precedence
@@ -102,6 +103,7 @@ std::optional<std::string> DeletePinTest::Execute(
   cbor::Value::BinaryValue old_auth_token =
       command_state->GetCurrentAuthToken();
 
+  std::cout << "--> reset due to DeletePinTest <--" << std::endl;
   command_state->Reset();
 
   if (!device_tracker->CheckStatus(
