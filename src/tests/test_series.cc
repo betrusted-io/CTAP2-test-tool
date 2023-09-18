@@ -27,6 +27,9 @@ namespace runners {
 const std::vector<std::unique_ptr<BaseTest>>& GetTests() {
   static const auto* const tests = [] {
     auto* test_list = new std::vector<std::unique_ptr<BaseTest>>;
+#if 0 // set to 1 just for fast-track testing, specifically with relation to issue #416 in xous-core
+    test_list->push_back(std::make_unique<MakeCredentialOptionUvTrueTest>()); // fast-track this test while debugging Rust 1.72 issue
+#else
     test_list->push_back(
         std::make_unique<MakeCredentialBadParameterTypesTest>());
     test_list->push_back(
@@ -126,6 +129,7 @@ const std::vector<std::unique_ptr<BaseTest>>& GetTests() {
     test_list->push_back(std::make_unique<DeleteCredentialsTest>());
     test_list->push_back(std::make_unique<DeletePinTest>());
     test_list->push_back(std::make_unique<ResetPhysicalPresenceTest>());
+ #endif
     return test_list;
   }();
   return *tests;
